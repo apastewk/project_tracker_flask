@@ -1,8 +1,10 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash
 
 import hackbright
 
 app = Flask(__name__)
+app.secret_key = "lskhgd;oauiwrewgvoaihgaoh"
+
 
 @app.route("/student-search")
 def get_student_form():
@@ -21,11 +23,13 @@ def get_student():
                            first=first, 
                            last=last)
 
+
 @app.route("/student-add-form")
 def student_add_form():
     """Form to add a new student."""
 
     return render_template("student_add.html")
+
 
 @app.route("/student-add", methods=['POST'])
 def student_add():
@@ -35,11 +39,18 @@ def student_add():
     last = request.form.get("last")
     github = request.form.get("github")
 
-    # QUERY statements goes here
+    new_student = hackbright.make_new_student(first, last, github)
 
-    return render_template("student_new.html")
+    flash("You have successfully added a new student")
+
+    return render_template("student_new.html", 
+                            first=new_student[0],
+                            last=new_student[1],
+                            github=new_student[2])
 
 
 if __name__ == "__main__":
     hackbright.connect_to_db(app)
     app.run(debug=True)
+
+
