@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Project Info{% endblock %}
+
+{% block body %}
+    
+    {% set title, description, max_grade = project %}
+    <p>Title: {{ title }}</p>
+    <p>Description: {{ description }}</p>
+    <p>Grade: {{ max_grade }}</p>
+    
+{% endblock %}
